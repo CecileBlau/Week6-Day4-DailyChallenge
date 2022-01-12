@@ -1,0 +1,53 @@
+-- CREATE TABLE orderp (
+-- order_id SERIAL PRIMARY KEY,
+-- usarname VARCHAR(20) NOT NULL,
+-- email VARCHAR(50) NOT NULL
+-- )
+
+-- CREATE TABLE items(
+-- item_id SERIAL PRIMARY KEY,
+-- name VARCHAR(20) NOT NULL,
+-- price INTEGER NOT NULL,
+-- quantity INTEGER NOT NULL,
+-- order_item_id INTEGER REFERENCES orderp(order_id)
+-- )
+
+
+
+-- INSERT INTO orderp (usarname, email)
+-- VALUES ('Rodrigogt','rodrigo@gmail.com'), ('juanaq', 'junita873@hotmail.com')
+
+-- INSERT INTO items (name, price, quantity,order_item_id)
+-- VALUES ('chair', 60, 2, 1), ('apples', 12, 3, 2), ('bottle', 10, 3,1)
+
+-- SELECT *
+-- FROM orderp
+-- INNER JOIN items
+-- ON order_id = order_item_id
+
+
+
+
+
+
+CREATE OR REPLACE FUNCTION finalPrice(numberOfOrder INTEGER)
+RETURNS INTEGER
+LANGUAGE plpgsql
+AS
+$$
+DECLARE orderFinal INTEGER;
+BEGIN
+SELECT SUM (price*quantity)
+FROM items
+INNER JOIN orderp
+ON orderp.order_id = numberOfOrder
+WHERE items.order_item_id = numberOfOrder
+INTO orderFinal;
+RETURN orderFinal;
+END;
+$$
+
+SELECT finalPrice(1)
+SELECT * FROM orderp
+
+
